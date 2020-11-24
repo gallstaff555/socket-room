@@ -24,13 +24,14 @@ class MessageInput extends Component {
         return (
             <React.Fragment>
                 <form onSubmit={this.handleSubmit} className="form">
-                    <div className="form-group">
+                    <div className="form-group m-4">
                         <label htmlFor="msg">Message</label>
                         <input 
                             value={this.state.message} 
                             autoFocus id="msg" type="text" 
                             className="form-control"
-                            onChange={this.handleChange}>
+                            onChange={this.handleChange}
+                            style={{width: "400px"}}>
                         </input>
                         <button 
                             onClick={() => this.props.getMsg(this.state.message)} 

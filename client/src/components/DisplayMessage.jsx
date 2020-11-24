@@ -4,7 +4,7 @@ class DisplayMessage extends Component {
     
     render() {
         return(
-            <div class="alert alert-primary" role="alert">
+            <div className="alert alert-primary" role="alert">
                 {this.props.message}
             </div>
         );

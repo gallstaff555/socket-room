@@ -13,15 +13,23 @@ const io = socketIo(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log("New client connected");
+    const { id } = socket.client;
+    console.log(`Client connected: ${id}`);
 
-    socket.on("SEND_MESSAGE", (msg) => {
-        console.log("message: ", msg);
-        io.emit("RECEIVE_MESSAGE", msg);
+    socket.on("join", (room) => {
+        socket.join(room);
+        console.log(`${socket.id} is now in room: ${room}`);
     });
 
-    //A special namespace "disconnect" for when a client disconnects
-    socket.on("disconnect", () => console.log("Client disconnected"));
+    socket.on("send_message", (msg) => {
+        console.log("message: ", msg, id);
+        io.to(msg.room).emit("receive_message", msg);
+    });
+
+    //namespace for client disconnecting
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
+    });
 });
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
