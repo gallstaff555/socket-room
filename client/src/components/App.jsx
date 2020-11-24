@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import Message from "./Message";
+import InputMessage from "./MessageInput";
+import DisplayMessage from './DisplayMessage';
 
 var socket;
 
@@ -9,8 +10,11 @@ class App extends Component {
         super();
         this.state = {
             messages: [],
+            communication: {
+                messages: [],
+                sender: ''
+            },
             value: 0,
-            value2: 0,
             endpoint: "http://127.0.0.1:4001",
         };
     }
@@ -30,25 +34,6 @@ class App extends Component {
         });
     }
 
-    render() {
-        return (
-            <React.Fragment>
-                <h1>Chat room app</h1>
-                <button className="btn btn-primary form-control m-2" 
-                    onClick={() => this.handleEmitTest()}>
-                        Emit Test
-                </button>
-                <div>{this.state.value}</div>
-                <Message getMsg={this.handleNewMessage}/>
-                <div></div>
-                <div></div>
-                {this.state.messages.map(m => (
-                    <div key={m}>{m}</div>
-                ))}
-            </React.Fragment>
-        );
-    }
-
     handleEmitTest = () => {
         console.log("message sent");
         socket.emit("SEND_MESSAGE", this.state.value);
@@ -59,7 +44,27 @@ class App extends Component {
     handleNewMessage = (msg) => {
         socket.emit('SEND_MESSAGE', msg);
     }
-}
 
+
+
+    render() {
+        return (
+            <React.Fragment>
+                <h1>Chat room app</h1>
+                <button className="btn btn-primary form-control m-2" 
+                    style={{height: '40px', width: '100px'}}
+                    onClick={() => this.handleEmitTest()}>
+                        Emit Test
+                </button>
+                <InputMessage getMsg={this.handleNewMessage}/>
+                <div></div>
+                <div></div>
+                {this.state.messages.map(m => (
+                    <DisplayMessage message={m}/>
+                ))}
+            </React.Fragment>
+        );
+    }
+}
 export default App;
 

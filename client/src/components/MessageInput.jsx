@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Message extends Component {
+class MessageInput extends Component {
 
     state = {
         message: ''
@@ -16,6 +16,10 @@ class Message extends Component {
         this.setState( { message: ''} );
     };
 
+    handleValidation() {
+
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -28,7 +32,12 @@ class Message extends Component {
                             className="form-control"
                             onChange={this.handleChange}>
                         </input>
-                        <button onClick={() => this.props.getMsg(this.state.message)} className="btn btn-primary m-2">Send</button>
+                        <button 
+                            onClick={() => this.props.getMsg(this.state.message)} 
+                            className="btn btn-primary m-2"
+                            disabled={this.state.message.length < 1}>
+                            Send
+                        </button>
                     </div>
                 </form>
             </React.Fragment>
@@ -36,4 +45,4 @@ class Message extends Component {
     }
 }
 
-export default Message;
+export default MessageInput;
