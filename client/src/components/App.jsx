@@ -59,7 +59,6 @@ class App extends Component {
         this.setState({ room });
     };
 
-    //Render welcome screen if user has not provided a name or has not selected a chat room
     render() {
         const { userName } = this.state;
         if (userName.length === 0) {
@@ -68,12 +67,8 @@ class App extends Component {
 
         return (
             <React.Fragment>
-                <h1>Chat room app</h1>
-                <button
-                    className="btn btn-primary form-control m-2"
-                    style={{ height: "40px", width: "100px" }}
-                    onClick={() => this.handleEmitTest()}
-                >
+                <h1>Welcome, {this.state.userName}</h1>
+                <button className="btn btn-primary form-control m-2" onClick={() => this.handleEmitTest()}>
                     Emit Test
                 </button>
                 <InputMessage getMsg={this.handleNewMessage} />
