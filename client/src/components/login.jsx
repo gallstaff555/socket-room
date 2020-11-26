@@ -4,7 +4,7 @@ import "./chat.css";
 class Login extends Component {
     state = {
         inputName: "",
-        room: 1,
+        room: "Public",
     };
 
     handleNameChange = (e) => {
@@ -41,7 +41,7 @@ class Login extends Component {
                         ></input>
                     </div>
                     <div className="form-group">
-                        <label className="control-label">Room #</label>
+                        <label className="control-label">Channel</label>
                         <input
                             value={this.state.room}
                             id="msg"

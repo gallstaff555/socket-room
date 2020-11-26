@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import { v4 as uuid_v4 } from "uuid";
 import MessageInput from "./MessageInput";
 import DisplayMessage from "./DisplayMessage";
+import ChannelList from "./channelList";
 import Login from "./login";
 
 var socket;
@@ -18,9 +19,9 @@ class App extends Component {
                     createdAt: "",
                 },
             ],
-            messages: [],
+            publicRooms: [],
             userName: "",
-            room: 1,
+            room: "Public",
             msgCount: 0,
             endpoint: "http://127.0.0.1:4001",
         };
@@ -41,6 +42,39 @@ class App extends Component {
             messages.push({ message: msg.message, sender: msg.sender, createdAt: msg.createdAt });
             this.setState({ messageDetails: messages });
         });
+
+        let publicRooms = ["Public", "Room-1", "Room-2"];
+        this.setState({ publicRooms, room: "Public" });
+    }
+
+    render() {
+        const { userName, messageDetails, publicRooms, room } = this.state;
+        if (userName.length === 0) {
+            return <Login getUser={this.handleGetUser} getRoom={this.handleGetRoom} />;
+        }
+
+        return (
+            <div className="row">
+                <div className="col-3">
+                    <ChannelList room={room} publicRooms={publicRooms} onSelectRoom={this.handleGetRoom} />
+                </div>
+
+                <div className="col">
+                    <h3>Welcome, {this.state.userName}</h3>
+                    {messageDetails
+                        .filter((m) => m.message.length > 0)
+                        .map((m) => (
+                            <DisplayMessage
+                                key={uuid_v4()}
+                                message={m.message}
+                                sender={m.sender}
+                                createdAt={m.createdAt}
+                            />
+                        ))}
+                    <MessageInput getMsg={this.handleNewMessage} />
+                </div>
+            </div>
+        );
     }
 
     //Emit the given message to everyone in the room as this client.
@@ -56,7 +90,7 @@ class App extends Component {
     };
 
     //Assign the given user name to this client instance.
-    //Broadcast that the given user has joined the channel.
+    //Broadcast that the given user has joined the room.
     handleGetUser = (name) => {
         this.setState({ userName: name });
         socket.emit("send_message", {
@@ -71,30 +105,6 @@ class App extends Component {
         socket.emit("join", room);
         this.setState({ room });
     };
-
-    render() {
-        const { userName, messageDetails } = this.state;
-        if (userName.length === 0) {
-            return <Login getUser={this.handleGetUser} getRoom={this.handleGetRoom} />;
-        }
-
-        return (
-            <React.Fragment>
-                <h3>Welcome, {this.state.userName}</h3>
-                {messageDetails
-                    .filter((m) => m.message.length > 0)
-                    .map((m) => (
-                        <DisplayMessage
-                            key={uuid_v4()}
-                            message={m.message}
-                            sender={m.sender}
-                            createdAt={m.createdAt}
-                        />
-                    ))}
-                <MessageInput getMsg={this.handleNewMessage} />
-            </React.Fragment>
-        );
-    }
 }
 export default App;
 
