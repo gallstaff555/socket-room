@@ -1,3 +1,20 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,500,700");
+
+html,
+body {
+    height: 100%;
+    background: #121416;
+    color: #fff;
+    font-size: 16px;
+    font-family: "Roboto";
+}
+
+.display-message {
+    color: white;
+    background: rgb(59, 59, 59);
+    left: 30px;
+}
+
 .login-form {
     position: relative;
     top: 200px;
@@ -8,4 +25,37 @@
     width: 800px;
     color: blue;
     background: grey;
+}
+
+.box3 {
+    width: 300px;
+    margin: 50px auto;
+    border-radius: 15px;
+    background: blue;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-weight: 900;
+    font-family: arial;
+    position: relative;
+}
+
+.sb13:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 15px solid blue;
+    border-right: 15px solid transparent;
+    border-top: 15px solid blue;
+    border-bottom: 15px solid transparent;
+    right: -16px;
+    top: 0px;
+}
+
+.submit-message-form {
+    position: fixed;
+    left: 30px;
+    bottom: 60px;
+    height: 30px;
 }
