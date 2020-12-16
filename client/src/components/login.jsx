@@ -4,7 +4,7 @@ import "./chat.css";
 class Login extends Component {
     state = {
         inputName: "",
-        room: "Public",
+        room: "Public-1",
     };
 
     handleNameChange = (e) => {
@@ -16,7 +16,7 @@ class Login extends Component {
         let room = e.currentTarget.value;
         this.setState({ room });
     };
-    //
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.getUser(this.state.inputName);

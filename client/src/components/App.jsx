@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { v4 as uuid_v4 } from "uuid";
-import MessageInput from "./MessageInput";
-import DisplayMessage from "./DisplayMessage";
+import { Route, Switch } from "react-router-dom";
+import MessageLog from "./messageLog";
+import MessageInput from "./messageInput";
 import ChannelList from "./channelList";
 import Login from "./login";
+import test from "./test";
+import test2 from "./test2";
 
 var socket;
 
@@ -21,7 +23,7 @@ class App extends Component {
             ],
             publicRooms: [],
             userName: "",
-            room: "Public",
+            room: "Public-1",
             msgCount: 0,
             endpoint: "http://127.0.0.1:4001",
         };
@@ -43,8 +45,8 @@ class App extends Component {
             this.setState({ messageDetails: messages });
         });
 
-        let publicRooms = ["Public", "Room-1", "Room-2"];
-        this.setState({ publicRooms, room: "Public" });
+        let publicRooms = ["Public-1", "Public-2", "Public-3"];
+        this.setState({ publicRooms, room: "Public-1" });
     }
 
     render() {
@@ -61,20 +63,26 @@ class App extends Component {
 
                 <div className="col">
                     <h3>Welcome, {this.state.userName}</h3>
-                    {messageDetails
-                        .filter((m) => m.message.length > 0)
-                        .map((m) => (
-                            <DisplayMessage
-                                key={uuid_v4()}
-                                message={m.message}
-                                sender={m.sender}
-                                createdAt={m.createdAt}
-                            />
-                        ))}
-                    <MessageInput getMsg={this.handleNewMessage} />
+
+                    <div className="message-log">
+                        <MessageLog messageDetails={messageDetails} />
+                    </div>
+
+                    <div className="message-input">
+                        <MessageInput getMsg={this.handleNewMessage} />
+                    </div>
                 </div>
             </div>
         );
+
+        /*return (
+            <div>
+                <div className="content">
+                    <Route path="/" exact component={test} />
+                    <Route path="/test2" component={test2} />
+                </div>
+            </div>
+        );*/
     }
 
     //Emit the given message to everyone in the room as this client.

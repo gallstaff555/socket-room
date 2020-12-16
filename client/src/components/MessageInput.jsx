@@ -31,7 +31,7 @@ class MessageInput extends Component {
                             type="text"
                             className="form-control"
                             onChange={this.handleChange}
-                            style={{ width: "400px" }}
+                            style={{ width: "800px" }}
                         ></input>
                         <button
                             onClick={() => this.props.getMsg(this.state.message)}

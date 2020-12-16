@@ -53,9 +53,19 @@ body {
     top: 0px;
 }
 
-.submit-message-form {
+/*.submit-message-form {
     position: fixed;
     left: 30px;
     bottom: 60px;
     height: 30px;
+} */
+
+.message-input {
+    position: fixed;
+    bottom: 50px;
+}
+
+.col .message-log {
+    max-height: 80vh;
+    overflow-y: auto;
 }
