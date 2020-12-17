@@ -5,8 +5,14 @@ import "./chat.css";
 class DisplayMessage extends Component {
     state = {
         timeAgo: moment(this.props.createdAt).fromNow(),
-        //timeAgo: moment().format("MMM Do YYYY"),
     };
+
+    componentDidMount() {
+        this.interval = setInterval(
+            () => this.setState({ timeAgo: moment(this.props.createdAt).fromNow() }),
+            1000
+        );
+    }
 
     render() {
         return (

@@ -101,7 +101,8 @@ class App extends Component {
     //Broadcast that the given user has joined the room.
     handleGetUser = (name) => {
         this.setState({ userName: name });
-        socket.emit("send_message", {
+        //socket.emit("send_message", {
+        socket.emit("join_room", {
             room: this.state.room,
             message: `has joined the chat.`,
             sender: name,
