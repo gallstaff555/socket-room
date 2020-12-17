@@ -41,8 +41,6 @@ io.on("connection", (socket) => {
         console.log(`${socket.id} is now in room: ${room}`);
     });
 
-    //TODO separate "so and so has joined the chat to a separate socket function"
-
     //when message is received:
     //1) send message to everyone in the current room
     //2) print message to console
@@ -55,6 +53,11 @@ io.on("connection", (socket) => {
             if (err) return console.error(err);
             console.log(`${content.message} written to database.`);
         });
+    });
+
+    socket.on("join_room", (msg) => {
+        console.log("message: ", msg, id);
+        io.to(msg.room).emit("receive_message", msg);
     });
 
     //namespace for client disconnecting//
