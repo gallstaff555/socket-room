@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { Route, Switch } from "react-router-dom";
+import axios from "axios";
+//import { Route, Switch } from "react-router-dom";
 import MessageLog from "./messageLog";
 import MessageInput from "./messageInput";
 import ChannelList from "./channelList";
+import LoadMessages from "./loadMessages";
 import Login from "./login";
-import test from "./test";
-import test2 from "./test2";
 
 var socket;
 
@@ -70,6 +70,9 @@ class App extends Component {
 
                     <div className="message-input">
                         <MessageInput getMsg={this.handleNewMessage} />
+                        <div className="reload-msg">
+                            <LoadMessages loadMsg={this.handleLoadMsg} />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,6 +98,27 @@ class App extends Component {
             sender: this.state.userName,
             createdAt: new Date(),
         });
+    };
+
+    //retrive old messages from current channel from the database
+    handleLoadMsg = async () => {
+        console.log("test: loading msgs from server");
+        const msgLookup = {
+            method: "GET",
+            url: "/api/genres",
+        };
+
+        let messages = [];
+
+        await axios
+            .request(msgLookup)
+            .then((res) => {
+                messages = [...res.data];
+            })
+            .catch((error) => {
+                console.log("An error requesting messages from the db has occurred.");
+                console.error(error);
+            });
     };
 
     //Assign the given user name to this client instance.

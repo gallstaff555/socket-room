@@ -7,10 +7,11 @@ class DisplayMessage extends Component {
         timeAgo: moment(this.props.createdAt).fromNow(),
     };
 
+    //current bug re: unmounted component updating state
     componentDidMount() {
         this.interval = setInterval(
             () => this.setState({ timeAgo: moment(this.props.createdAt).fromNow() }),
-            1000
+            5000
         );
     }
 

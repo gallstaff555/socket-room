@@ -58,7 +58,7 @@ class Login extends Component {
                             className="btn btn-primary"
                             disabled={this.state.inputName.length === 0}
                         >
-                            Send
+                            Join
                         </button>
                     </div>
                 </form>
