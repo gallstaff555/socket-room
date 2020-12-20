@@ -9,21 +9,14 @@ connectToDatabase = () => {
         .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => console.log("Connected to mongo db..."))
         .catch((err) => console.log("Could not connect to DB", err));
-
+    mongoose.pluralize(null);
     return mongoose;
 };
 
-// const messageSchema = new mongoose.Schema({
-//     room: String,
-//     message: String,
-//     sender: String,
-//     createdAt: String,
-// });
-
 const collections = {
-    "Public-1": mongoose.model("public-1", schema.message),
-    "Public-2": mongoose.model("public-2", schema.message),
-    "Public-3": mongoose.model("public-3", schema.message),
+    public: mongoose.model("publics", schema.message),
+    general: mongoose.model("generals", schema.message),
+    global: mongoose.model("globals", schema.message),
 };
 
 exports.connectToDatabase = connectToDatabase;

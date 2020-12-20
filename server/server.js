@@ -3,7 +3,13 @@ const express = require("express");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
-const port = process.env.PORT || 4001;
+const PORT = process.env.PORT || 4001;
+
+server.listen(PORT, () => {
+    console.log(`Listening on port: ${PORT}`);
+});
+
+//const httpServer = http.createServer(app2);
 
 //connect to database service
 const db = require("./models/dbConnection");
@@ -16,6 +22,26 @@ const io = socketIo(server, {
         origin: "*",
     },
 });
+
+//
+//const app2 = express();
+//app2.listen(3000, () => console.log("listening for HTTP requests on Port 3000"));
+
+app.get("/test", (req, res) => {
+    console.log("test test");
+    res.send("hi");
+});
+
+app.get("/messages/public", async (req, res) => {
+    res.send(await getMessages());
+});
+
+async function getMessages() {
+    let public = db.collections["public"];
+    console.log(public.toString());
+    return await public.find();
+    //return await public.find().sort({ _id: 1 });
+}
 
 io.on("connection", (socket) => {
     const { id } = socket.client;
@@ -33,7 +59,8 @@ io.on("connection", (socket) => {
     socket.on("send_message", (msg) => {
         console.log("message: ", msg, id);
         io.to(msg.room).emit("receive_message", msg);
-        let m = new db.collections[msg.room]({ ...msg }); //dynamiclly create document
+        console.log("room:", msg.room);
+        let m = new db.collections[msg.room]({ ...msg }); //create document
         m.save(function (err, content) {
             if (err) return console.error(err);
             console.log(`${content.message} written to database.`);
@@ -51,7 +78,7 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(port, () => console.log(`Listening on port ${port}`));
+//app.listen(3000);
 
 /*
 GRAVEYARD

@@ -4,7 +4,7 @@ import "./chat.css";
 class Login extends Component {
     state = {
         inputName: "",
-        room: "Public-1",
+        room: "public",
     };
 
     handleNameChange = (e) => {
@@ -25,37 +25,37 @@ class Login extends Component {
 
     render() {
         return (
-            <div className="login-form">
+            <div className='login-form'>
                 <h2>Sockreact Chat</h2>
                 <form onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <label className="control-label">Username</label>
+                    <div className='form-group'>
+                        <label className='control-label'>Username</label>
                         <input
                             value={this.state.inputName}
                             autoFocus
-                            id="msg"
-                            type="text"
-                            className="form-control"
+                            id='msg'
+                            type='text'
+                            className='form-control'
                             onChange={this.handleNameChange}
                             //style={{ width: "400px" }}
                         ></input>
                     </div>
-                    <div className="form-group">
-                        <label className="control-label">Channel</label>
+                    <div className='form-group'>
+                        <label className='control-label'>Channel</label>
                         <input
                             value={this.state.room}
-                            id="msg"
-                            type="text"
-                            className="form-control"
+                            id='msg'
+                            type='text'
+                            className='form-control'
                             onChange={this.handleRoomChange}
                             //style={{ width: "400px" }}
                         ></input>
                     </div>
-                    <div className="form-group">
+                    <div className='form-group'>
                         <button
                             //onClick={() => this.props.getUser(this.state.inputName)}
                             onClick={this.onSubmit}
-                            className="btn btn-primary"
+                            className='btn btn-primary'
                             disabled={this.state.inputName.length === 0}
                         >
                             Join

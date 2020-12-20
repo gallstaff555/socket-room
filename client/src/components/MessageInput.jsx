@@ -21,21 +21,23 @@ class MessageInput extends Component {
     render() {
         return (
             <React.Fragment>
-                <form onSubmit={this.handleSubmit} className="submit-message-form">
-                    <div className="form-group">
-                        <label htmlFor="msg">Message</label>
+                <form onSubmit={this.handleSubmit} className='submit-message-form'>
+                    <div className='form-group'>
+                        <label htmlFor='msg' style={{ color: "white" }}>
+                            Enter Message
+                        </label>
                         <input
                             value={this.state.message}
                             autoFocus
-                            id="msg"
-                            type="text"
-                            className="form-control"
+                            id='msg'
+                            type='text'
+                            className='form-control'
                             onChange={this.handleChange}
                             style={{ width: "800px" }}
                         ></input>
                         <button
                             onClick={() => this.props.getMsg(this.state.message)}
-                            className="btn btn-primary m-2"
+                            className='btn btn-primary m-2'
                             disabled={this.state.message.length < 1}
                             style={{ display: "none" }}
                         ></button>

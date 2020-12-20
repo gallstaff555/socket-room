@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 //import { Route, Switch } from "react-router-dom";
+//import config from "../config/config";
+import config from "../config/config";
 import MessageLog from "./messageLog";
 import MessageInput from "./messageInput";
 import ChannelList from "./channelList";
@@ -23,13 +25,15 @@ class App extends Component {
             ],
             publicRooms: [],
             userName: "",
-            room: "Public-1",
+            room: "",
             msgCount: 0,
             endpoint: "http://127.0.0.1:4001",
         };
     }
 
     componentDidMount() {
+        document.body.style.backgroundColor = "#2C2F33";
+
         const { endpoint } = this.state;
         socket = io(endpoint);
 
@@ -45,8 +49,8 @@ class App extends Component {
             this.setState({ messageDetails: messages });
         });
 
-        let publicRooms = ["Public-1", "Public-2", "Public-3"];
-        this.setState({ publicRooms, room: "Public-1" });
+        let publicRooms = ["public", "general", "global"];
+        this.setState({ publicRooms, room: "public" });
     }
 
     render() {
@@ -56,21 +60,23 @@ class App extends Component {
         }
 
         return (
-            <div className="row">
-                <div className="col-3">
+            <div className='row'>
+                <div className='col-3'>
                     <ChannelList room={room} publicRooms={publicRooms} onSelectRoom={this.handleGetRoom} />
                 </div>
 
-                <div className="col">
-                    <h3>Welcome, {this.state.userName}</h3>
+                <div className='col'>
+                    <div className='welcome' style={{ color: "white" }}>
+                        <h3>Welcome, {this.state.userName}</h3>
+                    </div>
 
-                    <div className="message-log">
+                    <div className='message-log'>
                         <MessageLog messageDetails={messageDetails} />
                     </div>
 
-                    <div className="message-input">
+                    <div className='message-input'>
                         <MessageInput getMsg={this.handleNewMessage} />
-                        <div className="reload-msg">
+                        <div className='reload-msg'>
                             <LoadMessages loadMsg={this.handleLoadMsg} />
                         </div>
                     </div>
@@ -105,20 +111,34 @@ class App extends Component {
         console.log("test: loading msgs from server");
         const msgLookup = {
             method: "GET",
-            url: "/api/genres",
+            url: "/messages/public",
+            //url: "/messages/public",
+            //url: `/messages/${this.state.room}`,
         };
 
-        let messages = [];
+        let result = [];
 
         await axios
             .request(msgLookup)
             .then((res) => {
-                messages = [...res.data];
+                result = [...res.data];
             })
             .catch((error) => {
                 console.log("An error requesting messages from the db has occurred.");
                 console.error(error);
             });
+
+        let messages = [];
+
+        for (let m of result) {
+            const object = m;
+            const picked = (({ message, sender, createdAt }) => ({ message, sender, createdAt }))(object);
+            messages.push(picked);
+        }
+
+        console.log(messages);
+
+        this.setState({ messageDetails: messages });
     };
 
     //Assign the given user name to this client instance.

@@ -4,14 +4,14 @@ html,
 body {
     height: 100%;
     background: #121416;
-    color: #fff;
     font-size: 16px;
     font-family: "Roboto";
+    color: "purple";
 }
 
 .display-message {
-    color: white;
-    background: rgb(59, 59, 59);
+    color: "white";
+    background: "#2C2F33";
     left: 30px;
 }
 
@@ -66,10 +66,15 @@ body {
 
 .message-input {
     position: fixed;
-    bottom: 50px;
+    bottom: 25px;
 }
 
 .col .message-log {
     max-height: 80vh;
     overflow-y: auto;
+}
+
+.channel-list {
+    color: "purple";
+    background: "#23272A";
 }

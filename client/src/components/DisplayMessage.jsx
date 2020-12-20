@@ -17,9 +17,9 @@ class DisplayMessage extends Component {
 
     render() {
         return (
-            <div className="display-message">
+            <div className='display-message' style={{ color: "white" }}>
                 <span style={{ fontWeight: "bold" }}>{this.props.sender} </span>
-                <span className="date-timeago">{this.state.timeAgo}</span>
+                <span className='date-timeago'>{this.state.timeAgo}</span>
                 <br></br>
                 <span>{this.props.message}</span>
                 <hr></hr>

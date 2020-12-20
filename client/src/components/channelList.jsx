@@ -1,11 +1,12 @@
 import React from "react";
+import "./chat.css";
 
 const ChannelList = (props) => {
     const { publicRooms, room, onSelectRoom } = props;
 
     return (
-        <ul className="list-group">
-            <li className="list-group-item" style={{ fontWeight: "bold" }}>
+        <ul className='list-group channel-list'>
+            <li className='list-group-item list-group-item-dark' style={{ fontWeight: "bold" }}>
                 Public Channels
             </li>
             {publicRooms.map((r) => (
