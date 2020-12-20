@@ -3,12 +3,12 @@ import io from "socket.io-client";
 import axios from "axios";
 //import { Route, Switch } from "react-router-dom";
 //import config from "../config/config";
-import config from "../config/config";
 import MessageLog from "./messageLog";
 import MessageInput from "./messageInput";
 import ChannelList from "./channelList";
 import LoadMessages from "./loadMessages";
 import Login from "./login";
+import "./custom.scss";
 
 var socket;
 

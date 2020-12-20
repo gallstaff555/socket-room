@@ -1,5 +1,6 @@
 import React from "react";
-import "./chat.css";
+//import "./chat.css";
+import "./custom.scss";
 
 const ChannelList = (props) => {
     const { publicRooms, room, onSelectRoom } = props;
@@ -13,7 +14,7 @@ const ChannelList = (props) => {
                 <li
                     onClick={() => onSelectRoom(r)}
                     key={r}
-                    className={r === room ? "list-group-item active" : "list-group-item"}
+                    className={r === room ? "list-group-item active" : "list-group-item list-group-item-dark"}
                 >
                     {r}
                 </li>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
-import "./chat.css";
+//import "./chat.css";
+import "./custom.scss";
 
 class DisplayMessage extends Component {
     state = {

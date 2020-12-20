@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import "./chat.css";
+//import "./chat.css";
+import "./custom.scss";
 
 class LoadMessages extends Component {
     render() {
