@@ -38,7 +38,6 @@ class Login extends Component {
                             type='text'
                             className='form-control'
                             onChange={this.handleNameChange}
-                            //style={{ width: "400px" }}
                         ></input>
                     </div>
                     <div className='form-group'>
@@ -49,12 +48,10 @@ class Login extends Component {
                             type='text'
                             className='form-control'
                             onChange={this.handleRoomChange}
-                            //style={{ width: "400px" }}
                         ></input>
                     </div>
                     <div className='form-group'>
                         <button
-                            //onClick={() => this.props.getUser(this.state.inputName)}
                             onClick={this.onSubmit}
                             className='btn btn-primary'
                             disabled={this.state.inputName.length === 0}
