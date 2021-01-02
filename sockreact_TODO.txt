@@ -1,0 +1,37 @@
+--Sockreact TODO
+
+>fix autoscrolling of messages issue where i am forced to use "forceScroll=true"
+>separate routes and controllers; routes contain url and http methods, and controller contains the behavior callback for when a route is accessed
+>fix unmounted component error on "momentjs" setINterval in displayMessage.jsx
+>implement private channels
+>change font color for each message sender
+>change channel list to radio buttons (bootstrap)
+>add login/users/authentication
+
+--DONE
+>fetch from db:
+	--create button for loading all messages from db
+	
+	
+--NOTES
+controllers/ – defines your app routes and their logic
+helpers/ – code and functionality to be shared by different parts of the project
+middlewares/ – Express middlewares which process the incoming requests before handling them down to the routes
+models/ – represents data, implements business logic and handles storage
+public/ – contains all static files like images, styles and javascript
+views/ – provides templates which are rendered and served by your routes
+tests/ – tests everything which is in the other folders
+app.js – initializes the app and glues everything together
+package.json – remembers all packages that your app depends on and their versions
+
+
+
+
+
+
+
+
+const object = { a: 5, b: 6, c: 7  };
+const picked = (({ a, c }) => ({ a, c }))(object);
+
+console.log(picked); // { a: 5, c: 7 }

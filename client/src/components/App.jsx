@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
 import axios from "axios";
-//import { Route, Switch } from "react-router-dom";
-//import config from "../config/config";
 import MessageLog from "./messageLog";
 import MessageInput from "./messageInput";
 import ChannelList from "./channelList";
@@ -31,7 +29,7 @@ class App extends Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         document.body.style.backgroundColor = "#2C2F33";
 
         const { endpoint } = this.state;
@@ -49,16 +47,19 @@ class App extends Component {
             this.setState({ messageDetails: messages });
         });
 
-        let publicRooms = ["public", "general", "global"];
+        let publicRooms = await this.getChannels();
         this.setState({ publicRooms, room: "public" });
     }
 
     render() {
         const { userName, messageDetails, publicRooms, room } = this.state;
+
+        //render this if user has not signed in
         if (userName.length === 0) {
             return <Login getUser={this.handleGetUser} getRoom={this.handleGetRoom} />;
         }
 
+        //render this after user has signed in
         return (
             <div className='row'>
                 <div className='col-3'>
@@ -83,15 +84,6 @@ class App extends Component {
                 </div>
             </div>
         );
-
-        /*return (
-            <div>
-                <div className="content">
-                    <Route path="/" exact component={test} />
-                    <Route path="/test2" component={test2} />
-                </div>
-            </div>
-        );*/
     }
 
     //Emit the given message to everyone in the room as this client.
@@ -108,12 +100,10 @@ class App extends Component {
 
     //retrive old messages from current channel from the database
     handleLoadMsg = async () => {
-        console.log("test: loading msgs from server");
+        console.log("loading messages from database...");
         const msgLookup = {
             method: "GET",
-            url: "/messages/public",
-            //url: "/messages/public",
-            //url: `/messages/${this.state.room}`,
+            url: `/messages/${this.state.room}`,
         };
 
         let result = [];
@@ -128,24 +118,23 @@ class App extends Component {
                 console.error(error);
             });
 
-        let messages = [];
+        let messageDetails = [];
 
         for (let m of result) {
             const object = m;
             const picked = (({ message, sender, createdAt }) => ({ message, sender, createdAt }))(object);
-            messages.push(picked);
+            messageDetails.push(picked);
         }
 
-        console.log(messages);
+        console.log(messageDetails);
 
-        this.setState({ messageDetails: messages });
+        this.setState({ messageDetails });
     };
 
     //Assign the given user name to this client instance.
     //Broadcast that the given user has joined the room.
     handleGetUser = (name) => {
         this.setState({ userName: name });
-        //socket.emit("send_message", {
         socket.emit("join_room", {
             room: this.state.room,
             message: `has joined the chat.`,
@@ -154,9 +143,36 @@ class App extends Component {
         });
     };
 
+    //join a room and clear all messages
     handleGetRoom = (room) => {
         socket.emit("join", room);
         this.setState({ room });
+        let messageDetails = [];
+        this.setState({ messageDetails });
+        //this.handleLoadMsg();
+    };
+
+    getChannels = async () => {
+        console.log("getting channel names from server...");
+        const channelLookup = {
+            method: "GET",
+            url: "/channels/global",
+        };
+
+        let result = [];
+
+        await axios
+            .request(channelLookup)
+            .then((res) => {
+                result = [...res.data];
+            })
+            .catch((error) => {
+                console.log("there was a problem getting channel names from server");
+                console.error(error);
+            });
+
+        return result;
+        //this.setState({ publicRooms: result });
     };
 }
 export default App;
@@ -173,6 +189,15 @@ handleEmitTest = () => {
     const newValue = this.state.msgCount + 1;
     this.setState({ msgCount: newValue });
 };
+
+/*return (
+            <div>
+                <div className="content">
+                    <Route path="/" exact component={test} />
+                    <Route path="/test2" component={test2} />
+                </div>
+            </div>
+        );
 
 
 */

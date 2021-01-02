@@ -9,8 +9,6 @@ server.listen(PORT, () => {
     console.log(`Listening on port: ${PORT}`);
 });
 
-//const httpServer = http.createServer(app2);
-
 //connect to database service
 const db = require("./models/dbConnection");
 db.connectToDatabase();
@@ -23,23 +21,28 @@ const io = socketIo(server, {
     },
 });
 
-//
-//const app2 = express();
-//app2.listen(3000, () => console.log("listening for HTTP requests on Port 3000"));
+// app.get("/test", (req, res) => {
+//     console.log("test test");
+//     res.send("hi");
+// });
 
-app.get("/test", (req, res) => {
-    console.log("test test");
-    res.send("hi");
+//define global channels and create endpoint for each channel
+let globalChannels = ["public", "general", "global"];
+
+globalChannels.forEach((channel) => {
+    app.get(`/messages/${channel}`, async (req, res) => {
+        res.send(await getMessages(channel));
+    });
 });
 
-app.get("/messages/public", async (req, res) => {
-    res.send(await getMessages());
+app.get("/channels/global", async (req, res) => {
+    res.send(globalChannels);
 });
 
-async function getMessages() {
-    let public = db.collections["public"];
-    console.log(public.toString());
-    return await public.find();
+async function getMessages(channel) {
+    let collection = db.collections[channel];
+    console.log(collection.toString());
+    return await collection.find();
     //return await public.find().sort({ _id: 1 });
 }
 

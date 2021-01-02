@@ -1,5 +1,4 @@
 import React from "react";
-//import "./chat.css";
 import "./custom.scss";
 
 const ChannelList = (props) => {
