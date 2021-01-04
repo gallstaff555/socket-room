@@ -1,3 +1,18 @@
-This is a simple nodejs program for experimenting with socket.io and React.
+# Sockreact Chat App
 
-Currently it allows a user to send messages to multiple clients connected over a local server and store conversations in a remote database.
+This is a nodejs chat room built with socket.io and React.
+
+### Features / To-Do List
+
+- [x] Message logs are persistently stored in a MongoDB.
+- [x] Users can select multiple, separate channels.
+- [x] All other online users are visible
+- [x] Messages have time stamp relative to current time
+- [ ] Improve front end templating/formatting
+- [ ] Support non-text files
+
+### How To Run
+
+*client* - npm start
+*server* - node server.js
+
