@@ -18,3 +18,11 @@ This is a nodejs chat room built with socket.io and React.
 * *client* - npm start
 * *server* - node server.js
 
+### Dependencies
+
+##### Server 
+* Node.js
+* axios 0.21.0
+* express 4.17.1
+* mongoose 5.11.8
+* socket.io 3.0.3
