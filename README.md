@@ -20,8 +20,7 @@ This is a nodejs chat room built with socket.io and React.
 
 ### Dependencies
 
-##### Server 
-* Node.js
+##### Node.js
 * axios 0.21.0
 * express 4.17.1
 * mongoose 5.11.8
