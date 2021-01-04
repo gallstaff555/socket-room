@@ -2,6 +2,8 @@
 
 This is a nodejs chat room built with socket.io and React.
 
+![Imgur Image](https://i.imgur.com/GAAGLv0.png)
+
 ### Features / To-Do List
 
 - [x] Message logs are persistently stored in a MongoDB.
