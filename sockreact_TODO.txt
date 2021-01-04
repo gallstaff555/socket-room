@@ -1,5 +1,7 @@
 --Sockreact TODO
 
+>add routing to express server
+>fix long message overflow (ie make long messages automatically wrap to fit in middle of screen)
 >fix autoscrolling of messages issue where i am forced to use "forceScroll=true"
 >separate routes and controllers; routes contain url and http methods, and controller contains the behavior callback for when a route is accessed
 >fix unmounted component error on "momentjs" setINterval in displayMessage.jsx

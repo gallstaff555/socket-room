@@ -1,7 +1,23 @@
+/*
+This server is the backend for the Sockreact Chat App. Clients can connect via 
+socket.io client and share messages in multiple global chat rooms/channels. 
+
+Messages are shared over the socket.io interface and are stored in a mongodb.
+Clients can retrieve old messages from the database. 
+
+This server keeps track of users currently connected and updates the list of users
+when clients join or disconnect. 
+*/
+
 //set up express server
 const express = require("express");
 const http = require("http");
 const app = express();
+
+//middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const server = http.createServer(app);
 const PORT = process.env.PORT || 4001;
 
@@ -17,33 +33,41 @@ db.connectToDatabase();
 const socketIo = require("socket.io");
 const io = socketIo(server, {
     cors: {
-        origin: "*",
+        origin: "http://localhost:3000/",
+        credentials: true,
+        methods: ["GET", "POST"],
     },
 });
 
-// app.get("/test", (req, res) => {
-//     console.log("test test");
-//     res.send("hi");
-// });
-
 //define global channels and create endpoint for each channel
-let globalChannels = ["public", "general", "global"];
+const globalChannels = ["public", "general", "global"];
 
+//create endpoints to get full logs for each channel/chatroom
 globalChannels.forEach((channel) => {
     app.get(`/messages/${channel}`, async (req, res) => {
         res.send(await getMessages(channel));
     });
 });
 
+//client can retrieve names of the channels
 app.get("/channels/global", async (req, res) => {
     res.send(globalChannels);
 });
 
+//TODO: add validation so that no duplicate usernames can be taken at same time
+//a list of clients currently connected to the server/socketio
+let users = new Set();
+
+//sends current usernames to the client
+app.get("/users/names", async (req, res) => {
+    res.send(Array.from(users));
+});
+
+//fetch and return all messages from the given channel from the corresponding mongodb collection
 async function getMessages(channel) {
     let collection = db.collections[channel];
     console.log(collection.toString());
     return await collection.find();
-    //return await public.find().sort({ _id: 1 });
 }
 
 io.on("connection", (socket) => {
@@ -70,29 +94,29 @@ io.on("connection", (socket) => {
         });
     });
 
+    //emit a message to all connected users in a given room that a new client has connected
     socket.on("join_room", (msg) => {
         console.log("message: ", msg, id);
         io.to(msg.room).emit("receive_message", msg);
     });
 
-    //namespace for client disconnecting//
+    //client sends their username to the server to be added to set of usernames
+    //server broadcasts the updated list of usernames to all connected clients
+    socket.on("send_username", (msg) => {
+        console.log("client is providing their username: ", msg.username);
+        let user = {
+            socketID: id,
+            username: msg.username,
+        };
+        users.add(user);
+        socket.broadcast.emit("update_users_list");
+    });
+
+    //remove disconnecting client from set of usernames
     socket.on("disconnect", () => {
         console.log("Client disconnected");
+        let remainingUsers = [...users].filter((user) => user.socketID !== id);
+        users = new Set(remainingUsers);
+        socket.broadcast.emit("update_users_list");
     });
 });
-
-//app.listen(3000);
-
-/*
-GRAVEYARD
-//const login = require("./config/config");
-//const uri = `mongodb+srv://${login.user}:${login.pw}@david-sandbox.chqmq.mongodb.net/sockreact?retryWrites=true&w=majority`;
-//const mongoDB = require("./db/dbConnection");
-
-//const mongoose = require("mongoose");
-// mongoose
-//     .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => console.log("Connected to mongo db..."))
-//     .catch((err) => console.log("Could not connect to DB", err));
-
-*/

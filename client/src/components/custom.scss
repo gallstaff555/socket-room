@@ -41,12 +41,16 @@ body {
     background: grey;
 }
 
+.col-3 {
+    width: 100px;
+}
+
 .box3 {
     width: 300px;
     margin: 50px auto;
     border-radius: 15px;
     background: blue;
-    color: #fff;
+    //color: #fff;
     padding: 20px;
     text-align: center;
     font-weight: 900;
@@ -67,13 +71,6 @@ body {
     top: 0px;
 }
 
-/*.submit-message-form {
-    position: fixed;
-    left: 30px;
-    bottom: 60px;
-    height: 30px;
-} */
-
 .message-input {
     position: fixed;
     bottom: 25px;
@@ -82,11 +79,6 @@ body {
 .col .message-log {
     max-height: 80vh;
     overflow-y: auto;
-}
-
-.channel-list {
-    color: "purple";
-    background: "#23272A";
 }
 
 @import "node_modules/bootstrap/scss/bootstrap";

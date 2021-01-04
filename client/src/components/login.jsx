@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//import "./chat.css";
 import "./custom.scss";
 
 class Login extends Component {
@@ -22,6 +21,7 @@ class Login extends Component {
         e.preventDefault();
         this.props.getUser(this.state.inputName);
         this.props.getRoom(this.state.room);
+        this.props.sendUsername(this.state.inputName);
     };
 
     render() {

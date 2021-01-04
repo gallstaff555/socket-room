@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//import "./chat.css";
 import "./custom.scss";
 
 class MessageInput extends Component {

@@ -5,6 +5,7 @@ import MessageLog from "./messageLog";
 import MessageInput from "./messageInput";
 import ChannelList from "./channelList";
 import LoadMessages from "./loadMessages";
+import UserList from "./userList";
 import Login from "./login";
 import "./custom.scss";
 
@@ -21,8 +22,10 @@ class App extends Component {
                     createdAt: "",
                 },
             ],
-            publicRooms: [],
+            chatRooms: [],
             userName: "",
+            socketID: "",
+            otherUsers: [],
             room: "",
             msgCount: 0,
             endpoint: "http://127.0.0.1:4001",
@@ -33,37 +36,53 @@ class App extends Component {
         document.body.style.backgroundColor = "#2C2F33";
 
         const { endpoint } = this.state;
-        socket = io(endpoint);
-
-        socket.on("send_message", (count) => {
-            const msgCount = count + 1;
-            this.setState({ msgCount });
-        });
+        socket = io(endpoint, { transports: ["websocket", "polling", "flashsocket"] });
 
         socket.on("receive_message", (msg) => {
-            console.log("Message received", msg.message);
             let messages = this.state.messageDetails;
             messages.push({ message: msg.message, sender: msg.sender, createdAt: msg.createdAt });
             this.setState({ messageDetails: messages });
         });
 
-        let publicRooms = await this.getChannels();
-        this.setState({ publicRooms, room: "public" });
+        socket.on("update_users_list", async () => {
+            await this.getUsers();
+        });
+
+        let chatRooms = await this.getChannels();
+        await this.getUsers();
+        this.setState({ chatRooms, room: "public" });
     }
 
     render() {
-        const { userName, messageDetails, publicRooms, room } = this.state;
+        const { userName, otherUsers, messageDetails, chatRooms, room } = this.state;
 
         //render this if user has not signed in
         if (userName.length === 0) {
-            return <Login getUser={this.handleGetUser} getRoom={this.handleGetRoom} />;
+            return (
+                <Login
+                    getUser={this.handleGetUser}
+                    getRoom={this.handleGetRoom}
+                    sendUsername={this.handleSendUsername}
+                />
+            );
         }
 
         //render this after user has signed in
         return (
             <div className='row'>
                 <div className='col-3'>
-                    <ChannelList room={room} publicRooms={publicRooms} onSelectRoom={this.handleGetRoom} />
+                    <ChannelList
+                        title='Chat Rooms'
+                        room={room}
+                        chatRooms={chatRooms}
+                        onSelectRoom={this.handleGetRoom}
+                    />
+
+                    <br></br>
+                    <br></br>
+                    <br></br>
+
+                    <UserList otherUsers={otherUsers} myUserName={userName} />
                 </div>
 
                 <div className='col'>
@@ -152,8 +171,15 @@ class App extends Component {
         //this.handleLoadMsg();
     };
 
+    //sends this client's username to the server
+    handleSendUsername = (name) => {
+        socket.emit("send_username", {
+            username: name,
+        });
+    };
+
+    //get the channel (ie chat room) names from the server
     getChannels = async () => {
-        console.log("getting channel names from server...");
         const channelLookup = {
             method: "GET",
             url: "/channels/global",
@@ -172,32 +198,29 @@ class App extends Component {
             });
 
         return result;
-        //this.setState({ publicRooms: result });
+        //this.setState({ chatRooms: result });
+    };
+
+    //TODO: this function is very similar to getChannels; consider combining
+    getUsers = async () => {
+        const usersLookup = {
+            method: "GET",
+            url: "/users/names",
+        };
+
+        let otherUsers = [];
+
+        await axios
+            .request(usersLookup)
+            .then((res) => {
+                otherUsers = [...res.data];
+            })
+            .catch((error) => {
+                console.log("there was a problem getting usernames from server");
+                console.error(error);
+            });
+
+        this.setState({ otherUsers });
     };
 }
 export default App;
-
-/*Graveyard
-<button className="btn btn-primary form-control m-2" onClick={() => this.handleEmitTest()}>
-    Emit Test
-</button>
-
-//Emits a test message.
-handleEmitTest = () => {
-    console.log(`Message sent by ${socket.id}`);
-    socket.emit("send_message", { room: this.state.room, message: this.state.msgCount });
-    const newValue = this.state.msgCount + 1;
-    this.setState({ msgCount: newValue });
-};
-
-/*return (
-            <div>
-                <div className="content">
-                    <Route path="/" exact component={test} />
-                    <Route path="/test2" component={test2} />
-                </div>
-            </div>
-        );
-
-
-*/

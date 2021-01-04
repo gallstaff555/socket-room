@@ -1,25 +1,28 @@
-import React from "react";
+import React, { Component } from "react";
 import "./custom.scss";
 
-const ChannelList = (props) => {
-    const { publicRooms, room, onSelectRoom } = props;
+//const ChannelList = (props) => {
 
-    return (
-        <ul className='list-group channel-list'>
-            <li className='list-group-item list-group-item-dark' style={{ fontWeight: "bold" }}>
-                Public Channels
-            </li>
-            {publicRooms.map((r) => (
-                <li
-                    onClick={() => onSelectRoom(r)}
-                    key={r}
-                    className={r === room ? "list-group-item active" : "list-group-item list-group-item-dark"}
-                >
-                    {r}
+class ChannelList extends Component {
+    render() {
+        const { chatRooms, room, onSelectRoom, title } = this.props;
+        return (
+            <ul className='list-group channel-list'>
+                <li className='list-group-item list-group-item-secondary' style={{ fontWeight: "bold" }}>
+                    {title}
                 </li>
-            ))}
-        </ul>
-    );
-};
+                {chatRooms.map((r) => (
+                    <li
+                        onClick={() => onSelectRoom(r)}
+                        key={r}
+                        className={r === room ? "list-group-item active" : "list-group-item list-group-item-dark"}
+                    >
+                        {r}
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+}
 
 export default ChannelList;
