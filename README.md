@@ -13,6 +13,6 @@ This is a nodejs chat room built with socket.io and React.
 
 ### How To Run
 
-*client* - npm start
-*server* - node server.js
+* *client* - npm start
+* *server* - node server.js
 
